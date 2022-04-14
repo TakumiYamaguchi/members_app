@@ -1,0 +1,54 @@
+Dockerfile:
+FROM php:7.4.15-apache の部分は
+利用するPHPバージョンに置き換えて下さい。
+
+php.ini:
+PHPの設定ファイルです。タイムゾーンはここで設定します。
+
+000-default.conf:
+Apacheの設定ファイルです。
+（プロジェクトフォルダ名）の部分は、プロジェクトフォルダの名前、もしくは新規Laravelプロジェクトを作成する際のプロジェクト名を入れて下さい。
+
+my.cnf:
+MySQLの設定 追記する箇所はありません。
+
+mysql.env：
+データベース設定です。
+ここで決めたデータベース名は後でLaravel側で設定するのでメモって置いて下さい。
+
+docker-compose.yml：
+docker-composeの設定ファイルを書いてます。
+コンテナー名は、私は
+app: Laravelのプロジェクト名
+mysql: Laravelのプロジェクト名_db
+に統一しています。
+
+
+
+ターミナルから今回作ったフォルダに移動し、Dockerを立ち上げます。
+
+#Dockerイメージを作る
+docker-compose build --no-cache
+
+#Dockerコンテナを作る
+docker-compose up -d
+
+#作ったコンテナの中に入る
+docker exec -it (appのcontainer_name) bash
+
+#新規プロジェクトの場合はここからLaravelをインストール
+#これはlaravel6系のインストールなので、別バージョンの場合は最後の部分を変えてね！
+composer create-project --prefer-dist laravel/laravel (プロジェクト名) "6.*"
+
+
+#PhpMyAdminでデータベースを作成を行なってください。
+PhpMyAdminへアクセスしてデータベースとユーザーの作成
+先ほどのPhpMyAdminでのデータベース、ユーザー、パスワードを.envファイルに設定後マイグレーション実行
+
+
+参考サイト
+Dockerファイル作成
+https://blog.rie-k.com/2021/04/03/m1-mac-mini%E3%81%A7docker%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6laravel6-mysql%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%9F%E8%A9%B1/
+
+PhpMyAdminでデータベースを作成
+https://www.dbonline.jp/phpmyadmin/user/index1.html
